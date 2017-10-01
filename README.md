@@ -1,16 +1,25 @@
 # Mola Mola
 
+## Dev Setup
 
+### Client
 
-## run the client
+- Install npm and node
+  - Recommendation: use nvm to install npm and node.
+    - [Install nvm](https://github.com/creationix/nvm#installation)
+    - [Install node with nvm](https://github.com/creationix/nvm#usage)
+- Go into the web directory: `cd web`
+- Install dependencies of this project: `npm i`
+- Return to the project root: `cd ..`
+- Run development build: `make web-dev`
 
-- install npm and node
-  - recommendation: use nvm to install npm and node.
-    - [install nvm](https://github.com/creationix/nvm#installation)
-    - [install node with nvm](https://github.com/creationix/nvm#usage)
-- go into the web directory: `cd web`
-- install dependencies of this project: `npm i`
-- run development build: `make dev`
-  - your project is serving at [http://localhost:8000](), check it out.
-- build project: `make build`
-- \o/
+### Server
+
+- Install golang
+  - Do appropriate `GOPATH` setup
+- `go get github.com/sunmoyed/molamola`
+- `make compile-server`
+
+### Run
+- `make server-dev`
+  - Your project is serving at [http://localhost:4477](), check it out.

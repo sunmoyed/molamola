@@ -1,12 +1,15 @@
-PATH  := node_modules/.bin:$(PATH)
-SHELL := /bin/bash
+PATH := node_modules/.bin:$(PATH)
 
 .PHONY : default clean
 
 default: dev
 
 dev:
-	make index & make watch-js & make watch-css & make serve
+	bash -c "${MAKE} build-web && \
+		( \
+			${MAKE} watch-js & \
+			${MAKE} watch-css \
+		)"
 
 # TODO minify for web builds
 build-web: css index js
@@ -33,6 +36,3 @@ watch-js:
 
 watch-css:
 	node-sass -w src/css/main.sass -o dist
-
-serve:
-	pushd dist; python -m SimpleHTTPServer; pop
