@@ -1,6 +1,10 @@
 PATH  := node_modules/.bin:$(PATH)
 SHELL := /bin/bash
 
+.PHONY : default clean
+
+default: dev
+
 dev: build-web serve & watch-js & watch-css
 
 # TODO minify for web builds
@@ -19,7 +23,7 @@ dist/index.html: src/index.html
 dist/js/ : src/js/*
 	browserify -t -d src/js/index.js -o dist/bundle.js
 
-clean-web:
+clean:
 	rm -rf dist
 	mkdir dist
 

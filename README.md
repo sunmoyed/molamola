@@ -8,6 +8,7 @@
   - recommendation: use nvm to install npm and node.
     - [install nvm](https://github.com/creationix/nvm#installation)
     - [install node with nvm](https://github.com/creationix/nvm#usage)
+- go into the web directory: `cd web`
 - install dependencies of this project: `npm i`
 - run development build: `make dev`
   - your project is serving at [http://localhost:8000](), check it out.
