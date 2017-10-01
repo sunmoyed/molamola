@@ -5,7 +5,8 @@ SHELL := /bin/bash
 
 default: dev
 
-dev: build-web serve & watch-js & watch-css
+dev:
+	make index & make watch-js & make watch-css & make serve
 
 # TODO minify for web builds
 build-web: css index js
