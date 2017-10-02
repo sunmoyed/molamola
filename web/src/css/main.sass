@@ -1,19 +1,140 @@
+$highlight: #f0e9db
+$highlight-dark: #d6c8ad
+$text: #222
+
+
+/*** reset ***/
+
+[role="button"],
+input[type="submit"],
+input[type="reset"],
+input[type="button"],
+button
+  box-sizing: content-box
+
+/* Reset `button` and button-style `input` default styles */
+input[type="submit"],
+input[type="reset"],
+input[type="button"],
+button
+  background: none
+  border: 0
+  color: inherit
+  /* cursor: default */
+  font: inherit
+  line-height: normal
+  overflow: visible
+  padding: 0
+  -webkit-appearance: button /* for input */
+  -webkit-user-select: none /* for button */
+     -moz-user-select: none
+      -ms-user-select: none
+
+input::-moz-focus-inner,
+button::-moz-focus-inner
+  border: 0
+  padding: 0
+
+/* Make `a` like a button */
+[role="button"]
+  color: inherit
+  cursor: default
+  display: inline-block
+  text-align: center
+  text-decoration: none
+  white-space: pre
+  -webkit-user-select: none
+     -moz-user-select: none
+      -ms-user-select: none
+
+
+/*** elements ***/
+
 html, body
   padding: 0
   margin: 0
   font-family: monospace
+  color: $text
+
+input[type="submit"],
+input[type="reset"],
+input[type="button"],
+button
+  border-bottom: 1px solid $highlight-dark
+  cursor: pointer
+
+  &:hover
+    border-bottom: 1px solid darken($highlight-dark, 40%)
 
 #app
   display: flex
   flex-direction: column
   height: 100vh
 
+.root
+  display: flex
+  flex-direction: column
+
 .page
   display: flex
-  align-items: center
-  justify-content: center
-  height: 100vh
+  flex: 1 0 auto
+  align-items: flex-start
+  flex-wrap: wrap
 
 .container
   flex: none
   max-width: 50%
+
+.navigation
+  flex: 0 0 auto
+  background: $highlight
+  display: flex
+  flex-direction: row
+  justify-content: space-between
+  padding: 10px 0
+
+  h1
+    flex: 0 0 auto
+    margin: 0 10px
+
+  .navigation-buttons
+    flex: 0 0 auto
+    display: flex
+    justify-content: flex-end
+    align-items: flex-end
+
+    .navigation-button
+      flex: 1 0 auto
+      border-color: $highlight-dark
+      border-width: 3px
+      margin: 0 10px
+
+      &:hover
+        border-color: darken($highlight-dark, 40%)
+
+.library
+  flex: 1 0 auto
+  margin: 10px
+
+.list
+  width: 500px
+  display: flex
+  flex-direction: row
+  flex-wrap: wrap
+
+  .row
+    flex: 1 0 100%
+    margin: 10px 0
+    padding: 2px 0
+    display: flex
+    flex-direction: row
+    border-bottom: 1px solid $highlight-dark
+
+    &:first-child
+      font-weight: bold
+
+    .column
+      flex: 1 1 auto
+      &:first-child
+        flex: 1 0 auto
+        flex-basis: 30%

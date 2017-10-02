@@ -8,3 +8,5 @@ export default (state = 0, action) => {
       return state
   }
 }
+
+// const new_obj = {...old_obj, new_val: 2};
