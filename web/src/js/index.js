@@ -1,18 +1,21 @@
 import React from 'react'
-import ReactDOM from 'react-dom'
+import { render } from 'react-dom'
 import { createStore } from 'redux'
+import { Provider } from 'react-redux'
+
 import App from './components/App'
 import rootReducer from './reducers'
 
-const initialState = {}
+const initialState = {
+  library: [["cowboy bebop", "fav"],
+            ["penguindrum", "??? what even is"],
+            ["psycho-pass", "I still need to finish this xD"] ]}
 
 const store = createStore(rootReducer, initialState)
-const rootElement = document.getElementById('app')
 
-const render = () => ReactDOM.render(
-  <App />,
-  rootElement
+render(
+  <Provider store={store}>
+    <App />
+  </Provider>,
+  document.getElementById('app')
 )
-
-render()
-store.subscribe(render)
