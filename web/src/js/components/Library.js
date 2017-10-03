@@ -10,6 +10,7 @@ class Library extends Component {
         <List
           title={ ["title", "info"] }
           rows={ library }>
+          <AddRow />
         </List>
       </div>
     );
@@ -59,5 +60,12 @@ const ListRowColumn = ({ item }) => (
 ListRowColumn.propTypes = {
   // text: PropTypes.string
 }
+
+const AddRow = () => (
+  <ListRow columns={[
+    <input placeholder="title"></input>,
+    <input placeholder="notes"></input>
+  ]} />
+)
 
 export default Library
