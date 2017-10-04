@@ -2,8 +2,11 @@ import * as types from './actions';
 
 const SESSION_STORAGE_KEY = 'molamola-jwt'
 
-export function loginSuccess() {
-  return {type: types.LOG_IN_SUCCESS}
+export function loginSuccess(credentials) {
+  return {
+    type: types.LOG_IN_SUCCESS,
+    user: credentials
+  }
 }
 
 export function loginUser(credentials) {
@@ -11,7 +14,9 @@ export function loginUser(credentials) {
     return login(credentials).then(response => {
       console.log("we got a token!", response.jwt);
       sessionStorage.setItem(SESSION_STORAGE_KEY, response.jwt);
-      dispatch(loginSuccess());
+      // TODO this is fake
+      dispatch(loginSuccess({username: credentials.username, avatar: null}));
+      // dispatch(loginSuccess(response.user));
     }).catch(error => {
       debugger;
       throw(error);

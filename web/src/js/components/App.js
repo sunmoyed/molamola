@@ -4,7 +4,7 @@ import { Route, Switch } from 'react-router'
 
 import Navigation from './Navigation'
 import Library from './Library'
-import Login from './Login'
+import LoginPage from './LoginPage'
 
 
 const ConnectedSwitch = connect(state => ({
@@ -19,11 +19,11 @@ const App = ({ location, user }) => {
       <Navigation />
       <div className="page">
         <ConnectedSwitch>
-          <Route exact path="/" component={loggedIn ? Library : Login}/>
+          <Route exact path="/" component={loggedIn ? Library : LoginPage}/>
           {loggedIn &&
             <Route path="/library" component={Library}/>}
           {!loggedIn &&
-            <Route path="/login" component={Login}/>}
+            <Route path="/login" component={LoginPage}/>}
         </ConnectedSwitch>
       </div>
     </div>

@@ -4,7 +4,7 @@ import {bindActionCreators} from 'redux';
 import * as sessionActions from '../actions/sessionActions';
 import TextInput from './TextInput';
 
-class LogInPage extends React.Component {
+class LoginPage extends React.Component {
   constructor(props) {
     super(props);
     this.state = {credentials: {username: '', password: ''}}
@@ -27,6 +27,7 @@ class LogInPage extends React.Component {
       <div className="login page-component">
         <form>
           <TextInput
+            autoFocus={true}
             name="username"
             label="username"
             placeholder="sunfish"
@@ -56,4 +57,4 @@ function mapDispatchToProps(dispatch) {
     actions: bindActionCreators(sessionActions, dispatch)
   };
 }
-export default connect(null, mapDispatchToProps)(LogInPage);
+export default connect(null, mapDispatchToProps)(LoginPage);

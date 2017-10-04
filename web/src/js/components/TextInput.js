@@ -1,6 +1,6 @@
 import React, {PropTypes} from 'react';
 
-const TextInput = ({name, label, onChange, placeholder, value, error, type="text"}) => {
+const TextInput = ({autoFocus, name, label, onChange, placeholder, value, error, type="text"}) => {
   let wrapperClass = 'form-group';
   if (error && error.length > 0) {
     wrapperClass += " " + 'has-error';
@@ -11,6 +11,7 @@ const TextInput = ({name, label, onChange, placeholder, value, error, type="text
       <label htmlFor={name}>{label}</label>
       <div className="field">
         <input
+          autoFocus={autoFocus}
           type={type}
           name={name}
           className="form-control"
