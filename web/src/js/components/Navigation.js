@@ -1,9 +1,17 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
+import {bindActionCreators} from 'redux';
 import { Link } from 'react-router-dom'
 import PropTypes from 'prop-types'
 
+import { logOutUser } from '../actions/sessionActions'
+
 class Navigation extends Component {
+
+  logout(e) {
+    e.preventDefault()
+    this.props.onLogoutClick()
+  }
 
   render() {
     const {username} = this.props.user
@@ -12,11 +20,12 @@ class Navigation extends Component {
       <div className="navigation">
         <h1><Link to="/">mola mola</Link></h1>
         <div className="navigation-buttons">
-          <Link to="/login" className="navigation-button">login</Link>
           {username &&
             <Link to="/library" className="navigation-button">{`hello ${username}`}</Link>}
           {username?
-            <button className="navigation-button">log out</button> :
+            <button
+              className="navigation-button"
+              onClick={this.props.onLogoutClick}>logout</button> :
             <Link to="/login" className="navigation-button">login</Link>}
         </div>
       </div>
@@ -24,9 +33,8 @@ class Navigation extends Component {
   }
 }
 
-const mapStateToProps = (state) => {
-  return {user: {...state.rootReducer.user}}}
+const mapStateToProps = (state) => ({user: {...state.rootReducer.user}})
 
-const mapDispatchToProps = {}
+const mapDispatchToProps = (dispatch) => ({onLogoutClick: bindActionCreators(logOutUser, dispatch)})
 
 export default connect(mapStateToProps, mapDispatchToProps)(Navigation)

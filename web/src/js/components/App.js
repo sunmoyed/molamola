@@ -11,17 +11,26 @@ const ConnectedSwitch = connect(state => ({
   location: {...state.routerReducer.location}
 }))(Switch);
 
-const App = ({ location }) => (
-   <div className="root">
-     <Navigation />
-     <div className="page">
-       <ConnectedSwitch>
-         <Route exact path="/" component={Library}/>
-         <Route path="/library" component={Library}/>
-         <Route path="/login" component={Login}/>
-      </ConnectedSwitch>
-     </div>
-   </div>
-);
+const App = ({ location, user }) => {
+  const loggedIn = !!user.username
 
-export default connect(state => ({location: state.location}))(App)
+  return (
+    <div className="root">
+      <Navigation />
+      <div className="page">
+        <ConnectedSwitch>
+          <Route exact path="/" component={loggedIn ? Library : Login}/>
+          {loggedIn &&
+            <Route path="/library" component={Library}/>}
+          {!loggedIn &&
+            <Route path="/login" component={Login}/>}
+        </ConnectedSwitch>
+      </div>
+    </div>
+  )
+}
+
+export default connect(state => ({
+  user: {...state.rootReducer.user},
+  location: {...state.routerReducer.location}
+}))(App)

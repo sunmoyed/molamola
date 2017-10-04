@@ -1,5 +1,7 @@
 import * as types from './actions';
 
+const SESSION_STORAGE_KEY = 'molamola-jwt'
+
 export function loginSuccess() {
   return {type: types.LOG_IN_SUCCESS}
 }
@@ -8,7 +10,7 @@ export function loginUser(credentials) {
   return function(dispatch) {
     return login(credentials).then(response => {
       console.log("we got a token!", response.jwt);
-      sessionStorage.setItem('molamola-jwt', response.jwt);
+      sessionStorage.setItem(SESSION_STORAGE_KEY, response.jwt);
       dispatch(loginSuccess());
     }).catch(error => {
       debugger;
@@ -17,9 +19,9 @@ export function loginUser(credentials) {
   };
 }
 
-// IMPURE!
-export function logOutUser() {
-  sessionStorage.removeItem('jwt');
+export function logOutUser(e) {
+  e.preventDefault()
+  sessionStorage.removeItem(SESSION_STORAGE_KEY); // IMPURE!
 
   return {type: types.LOG_OUT}
 }

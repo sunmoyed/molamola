@@ -13,9 +13,9 @@ const initialState = {
 export default (state = initialState, action) => {
   switch (action.type) {
     case types.LOG_OUT:
-      browserHistory.push('/')  // IMPURE!
-      return !!sessionStorage.jwt
-    //   return {...state, isAuthenticated: true}
+      // browserHistory.push('/')  // IMPURE! // TODO where is browserHistory?
+      !!sessionStorage.jwt
+      return Object.assign({}, state, {user: null})
     default:
       return {...state}
   }
