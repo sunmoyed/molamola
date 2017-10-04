@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
-import { connect } from 'react-redux'
 import Navigation from './Navigation'
 import Library from './Library'
+import Login from './Login'
 
 class App extends Component {
 
@@ -10,20 +10,13 @@ class App extends Component {
       <div className="root">
         <Navigation />
         <div className="page">
-          <LibraryContainer />
+          <Login />
+          <Library />
         </div>
       </div>
     )
   }
 }
-
-const mapStateToProps = (state) => ({
-  library: state.library
-})
-
-const mapDispatchToProps = {}
-
-const LibraryContainer = connect(mapStateToProps, mapDispatchToProps)(Library)
 
 
 export default App

@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import { connect } from 'react-redux'
 import PropTypes from 'prop-types'
 
 class Library extends Component {
@@ -20,6 +21,14 @@ Library.propTypes = {
   library: PropTypes.array,
   onClick: PropTypes.func // todo
 }
+
+const mapStateToProps = (state) => ({
+  library: state.library
+})
+
+const mapDispatchToProps = {}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Library)
 
 
 class List extends Component {
@@ -67,5 +76,3 @@ const AddRow = () => (
     <input placeholder="notes"></input>
   ]} />
 )
-
-export default Library

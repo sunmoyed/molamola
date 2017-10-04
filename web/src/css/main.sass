@@ -80,6 +80,12 @@ button
   flex: 1 0 auto
   align-items: flex-start
   flex-wrap: wrap
+  margin: 10px
+
+.page-component,
+.library
+  flex: 1 0 100%
+  margin-bottom: 20px
 
 .container
   flex: none
@@ -112,10 +118,6 @@ button
       &:hover
         border-color: darken($highlight-dark, 40%)
 
-.library
-  flex: 1 0 auto
-  margin: 10px
-
 .list
   width: 500px
   display: flex
@@ -146,3 +148,7 @@ button
     padding: 2px 5px
     width: 100%
     border: 1px solid $highlight-dark
+
+form
+  .form-group
+    margin-bottom: 15px
