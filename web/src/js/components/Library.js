@@ -23,7 +23,7 @@ Library.propTypes = {
 }
 
 const mapStateToProps = (state) => ({
-  library: state.library
+  library: [...state.rootReducer.library]
 })
 
 const mapDispatchToProps = {}

@@ -1,9 +1,18 @@
 $highlight: #f0e9db
 $highlight-dark: #d6c8ad
 $text: #222
+$text-mute: #666
 
 
 /*** reset ***/
+
+input
+  background: none
+  border: 1px solid $highlight-dark
+  color: $text
+
+  &::placeholder
+    color: $text-mute
 
 [role="button"],
 input[type="submit"],
@@ -46,6 +55,10 @@ button::-moz-focus-inner
   -webkit-user-select: none
      -moz-user-select: none
       -ms-user-select: none
+
+a
+  text-decoration: none
+  border-bottom: 1px solid $highlight-dark
 
 
 /*** elements ***/
@@ -91,6 +104,16 @@ button
   flex: none
   max-width: 50%
 
+a,
+button
+  color: $text
+  border-color: $highlight-dark
+  border-width: 3px
+  margin: 0 10px
+
+  &:hover
+    border-color: darken($highlight-dark, 40%)
+
 .navigation
   flex: 0 0 auto
   background: $highlight
@@ -98,10 +121,6 @@ button
   flex-direction: row
   justify-content: space-between
   padding: 10px 0
-
-  h1
-    flex: 0 0 auto
-    margin: 0 10px
 
   .navigation-buttons
     flex: 0 0 auto
@@ -111,12 +130,13 @@ button
 
     .navigation-button
       flex: 1 0 auto
-      border-color: $highlight-dark
       border-width: 3px
-      margin: 0 10px
 
-      &:hover
-        border-color: darken($highlight-dark, 40%)
+  h1
+    flex: 0 0 auto
+    margin: 0 10px
+    a
+      border: none
 
 .list
   width: 500px
