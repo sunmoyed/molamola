@@ -12,13 +12,15 @@ var logger = log.DefaultLogger
 func main() {
 	var addr string
 	var datadir string
-	var assetdir string
+	var webdir string
 
 	flag.StringVar(&addr, "addr", ":4477", "Address to listen on")
 	flag.StringVar(&datadir, "data", "data", "Data directory")
-	flag.StringVar(&assetdir, "assets", "web/dist", "Asset directory")
+	flag.StringVar(&webdir, "webdir", "web/dist", "Web directory")
 
-	sv, svErr := server.NewServer(addr, datadir, assetdir)
+	flag.Parse()
+
+	sv, svErr := server.NewServer(addr, datadir, webdir)
 	if svErr != nil {
 		logger.Fatal("new server error: ", svErr)
 	}

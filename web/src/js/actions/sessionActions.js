@@ -12,8 +12,8 @@ export function loginSuccess(credentials) {
 export function loginUser(credentials) {
   return function(dispatch) {
     return login(credentials).then(response => {
-      console.log("we got a token!", response.jwt);
-      sessionStorage.setItem(SESSION_STORAGE_KEY, response.jwt);
+      console.log("we got a token!", response.auth.token);
+      sessionStorage.setItem(SESSION_STORAGE_KEY, response.auth.token);
       // TODO this is fake
       dispatch(loginSuccess({username: credentials.username, avatar: null}));
       // dispatch(loginSuccess(response.user));
@@ -43,30 +43,32 @@ export function logOutUser(e) {
 
 // IMPURE!
 const login = (credentials) => {
-  // const request = new Request(`${process.env.API_HOST}/login`, {
-  //   method: 'POST',
-  //   headers: new Headers({
-  //     'Content-Type': 'application/json'
-  //   }),
-  //   body: JSON.stringify({auth: credentials})
-  // });
-  //
-  // return fetch(request).then(response => {
-  //   return response.json();
-  // }).catch(error => {
-  //   return error;
-  // });
+   const request = new Request(`login`, {
+     method: 'POST',
+     headers: new Headers({
+       'Content-Type': 'application/json'
+     }),
+     body: JSON.stringify({auth: credentials})
+   });
+  
+   return fetch(request).then(response => {
+     console.log(response);
+     return response.json();
+   }).catch(error => {
+     console.log("login error", error);
+     return error;
+   });
 
   // TODO replace fake network calls \o/
-  const request = new Promise((resolve, reject) => {
-    setTimeout(function(){
-      resolve({json: () => {return {jwt: 'ayyy'}}});
-    }, 250);
-  });
+  //const request = new Promise((resolve, reject) => {
+  //  setTimeout(function(){
+  //    resolve({json: () => {return {jwt: 'ayyy'}}});
+  //  }, 250);
+  //});
 
-  return request.then(response => {
-    return response.json();
-  }).catch(error => {
-    return error;
-  });
+  //return request.then(response => {
+  //  return response.json();
+  //}).catch(error => {
+  //  return error;
+  //});
 }

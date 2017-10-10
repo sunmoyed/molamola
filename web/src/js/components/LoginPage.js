@@ -30,7 +30,7 @@ class LoginPage extends React.Component {
             autoFocus={true}
             name="username"
             label="username"
-            placeholder="sunfish"
+            placeholder=""
             value={this.state.credentials.username}
             onChange={this.onChange}/>
 
@@ -38,7 +38,7 @@ class LoginPage extends React.Component {
             name="password"
             label="password"
             type="password"
-            placeholder="•••••••••••"
+            placeholder=""
             value={this.state.credentials.password}
             onChange={this.onChange}/>
 
