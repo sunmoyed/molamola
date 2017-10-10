@@ -2,3 +2,4 @@ web/node_modules
 web/dist
 
 server/pkg/cmd/molamola-server/molamola
+server/pkg/cmd/molamola-cli/molamolactl

@@ -2,60 +2,65 @@ package server
 
 import (
 	"fmt"
-	"io/ioutil"
 	"net/http"
 	"strings"
 
 	"github.com/sunmoyed/molamola/server/pkg/log"
+	"github.com/sunmoyed/molamola/server/pkg/user"
+	"github.com/sunmoyed/molamola/server/pkg/util"
 )
 
 var logger = log.DefaultLogger
 
 type State struct {
-	addr     string // Address to listen on
-	datadir  string // Directory to store data
-	assetdir string // Directory of assets
-
-	assets map[string]struct{} // All assets
+	addr    string          // Address to listen on
+	datadir string          // Directory to store data
+	webdir  string          // Directory of webfiles
+	us      *user.UserState // User state
 }
 
-const assetPath string = "/assets"
-const assetPathSlash string = assetPath + "/"
+const (
+	webPath   string = "/assets"
+	loginPath string = "/login"
 
-func NewServer(addr, datadir, assetdir string) (*State, error) {
-	assets := make(map[string]struct{})
-	assetInfo, assetInfoErr := ioutil.ReadDir(assetdir)
-	if assetInfoErr != nil {
-		return nil, assetInfoErr
-	}
-	for _, ai := range assetInfo {
-		if ai.IsDir() {
-			continue
-		}
-		assets[ai.Name()] = struct{}{}
-		logger.Println("new server asset", ai.Name())
+	webPathSlash string = webPath + "/"
+)
+
+func NewServer(addr, datadir, webdir string) (*State, error) {
+	logger.Println("addr", addr)
+	logger.Println("data", datadir)
+	logger.Println("webfiles", webdir)
+
+	us, usErr := user.NewUserState(datadir)
+	if usErr != nil {
+		return nil, usErr
 	}
 
 	return &State{
-		addr:     addr,
-		datadir:  datadir,
-		assetdir: assetdir,
-		assets:   assets,
+		addr:    addr,
+		datadir: datadir,
+		webdir:  webdir,
+		us:      us,
 	}, nil
 }
 
 func (s *State) Run() error {
-	// public: /public/<username>
-	// edit:   /edit/<username>    < we shouldn't have username here cause we should have a user session already
+	// public: /public/<username>/<listname>
+	// edit:   /edit/<listname>    < we shouldn't have username here cause we should have a user session already
 	// api:    /api/<...>
 	// assets: /assets/<...>
 
 	http.HandleFunc("/", s.handleDefault)
 	http.HandleFunc("/edit/", s.handleEdit)
-	http.HandleFunc(assetPathSlash, s.handleAssets)
+	http.HandleFunc(loginPath, s.handleLogin)
+	http.HandleFunc(webPathSlash, s.handleWeb)
 
 	logger.Printf("listening on %s", s.addr)
 	return http.ListenAndServe(s.addr, nil)
+}
+
+func (s *State) webfilepath(path string) string {
+	return s.webdir + "/" + path
 }
 
 func (s *State) handleDefault(w http.ResponseWriter, r *http.Request) {
@@ -64,43 +69,54 @@ func (s *State) handleDefault(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	http.ServeFile(w, r, fmt.Sprintf("%s/%s", s.assetdir, "index.html"))
+	http.ServeFile(w, r, s.webfilepath("index.html"))
 }
 
 func (s *State) handleError(w http.ResponseWriter, r *http.Request, status int) {
 	w.WriteHeader(status)
 
 	switch status {
+	case http.StatusUnauthorized:
+		fmt.Fprint(w, "401 molamola unauthorized")
 	case http.StatusNotFound:
 		fmt.Fprint(w, "404 molamola not found")
+	case http.StatusInternalServerError:
+		fmt.Fprint(w, "500 molamola internal server error")
 	}
 }
 
-func (s *State) handleAssets(w http.ResponseWriter, r *http.Request) {
-	asset, assetErr := getAsset(r, assetPathSlash)
-	if assetErr != nil {
-		logger.Printf("handle assets: %s", assetErr)
-		return
-	}
+func (s *State) handleWeb(w http.ResponseWriter, r *http.Request) {
+	webpath := strings.TrimPrefix(r.URL.Path, "/")
 
-	if _, ok := s.assets[asset]; !ok {
+	if err := validateWebPath(r.URL.Path); err != nil {
+		logger.Println(err)
 		s.handleError(w, r, http.StatusNotFound)
 		return
 	}
 
-	http.ServeFile(w, r, fmt.Sprintf("%s/%s", s.assetdir, asset))
+	path := s.webfilepath(webpath)
+	if ok, err := util.FileExists(path); err != nil {
+		logger.Printf("handleWeb error: %s", err)
+		s.handleError(w, r, http.StatusInternalServerError)
+		return
+	} else if !ok {
+		s.handleError(w, r, http.StatusNotFound)
+		return
+	}
+
+	http.ServeFile(w, r, path)
 }
 
-func getAsset(r *http.Request, prefix string) (string, error) {
-	logger.Println(r.URL.Path)
-	if !strings.HasPrefix(r.URL.Path, prefix) {
-		return "", fmt.Errorf("%s missing prefix %s", r.URL.Path, prefix)
+func validateWebPath(path string) error {
+	// XXX Check that this is actually working
+	split := strings.Split(path, "/")
+	for _, s := range split {
+		switch s {
+		case ".":
+			fallthrough
+		case "..":
+			return fmt.Errorf("invalid web path: %s", s)
+		}
 	}
-	cleanPrefix := strings.TrimPrefix(r.URL.Path, prefix)
-	cleanPath := strings.TrimSuffix(cleanPrefix, "/")
-	splitPath := strings.Split(cleanPath, "/")
-	if len(splitPath) != 1 {
-		return "", fmt.Errorf("could not get asset: %s", r.URL.Path)
-	}
-	return splitPath[0], nil
+	return nil
 }
